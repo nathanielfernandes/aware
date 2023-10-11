@@ -25,9 +25,9 @@ def analyze(text: str) -> dict:
         result = analyze_sentiment(text, top_k=3)
         tock = perf_counter()
 
-        positive = result.filter(lambda x: x["label"] == "positive")[0]["score"]
-        negative = result.filter(lambda x: x["label"] == "negative")[0]["score"]
-        neutral = result.filter(lambda x: x["label"] == "neutral")[0]["score"]
+        positive = next(filter(lambda x: x["label"] == "positive", result))["score"]
+        negative = next(filter(lambda x: x["label"] == "negative", result))["score"]
+        neutral = next(filter(lambda x: x["label"] == "neutral", result))["score"]
 
         # ms
         print(f"Analyzed sentiment in {round((tock - tick) * 1000)}ms 🔥")
