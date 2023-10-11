@@ -22,21 +22,27 @@ def analyze(text: str) -> dict:
     try:
         tick = perf_counter()
         # Analyze the sentiment of the text
-        result = analyze_sentiment(text)[0]
+        result = analyze_sentiment(text, top_k=3)
         tock = perf_counter()
+
+        positive = result.filter(lambda x: x["label"] == "positive")[0]["score"]
+        negative = result.filter(lambda x: x["label"] == "negative")[0]["score"]
+        neutral = result.filter(lambda x: x["label"] == "neutral")[0]["score"]
 
         # ms
         print(f"Analyzed sentiment in {round((tock - tick) * 1000)}ms 🔥")
 
         # Return the result
         return {
-            "label": result["label"],
-            "score": result["score"],
+            "positive": positive,
+            "negative": negative,
+            "neutral": neutral,
         }
     except Exception as e:
         print(f"Error analyzing sentiment: {e} ⭕")
         # Return an error
         return {
-            "label": "neutral",
-            "score": 0.0,
+            "positive": 0,
+            "negative": 0,
+            "neutral": 0,
         }
